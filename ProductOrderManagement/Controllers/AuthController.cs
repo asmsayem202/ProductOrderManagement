@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProductOrderManagement.Auth;
 using ProductOrderManagement.Dtos;
@@ -26,6 +27,13 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
+        var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+        if (existingUser != null)
+        {
+            // User already exists - return appropriate response
+            return BadRequest(new { message = "Email is already registered." });
+        }
+
         var user = new ApplicationUser { UserName = dto.Email, Email = dto.Email };
         var result = await _userManager.CreateAsync(user, dto.Password);
         if (!result.Succeeded) return BadRequest(result.Errors);
@@ -48,4 +56,24 @@ public class AuthController : ControllerBase
 
         return Ok(new { token });
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("assign-role")]
+    public async Task<IActionResult> AssignRole([FromBody] AssignRoleDto dto)
+    {
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user == null)
+            return NotFound("User not found.");
+
+        var roles = await _userManager.GetRolesAsync(user);
+        if (roles.Contains(dto.Role))
+            return BadRequest("User already has this role.");
+
+        var result = await _userManager.AddToRoleAsync(user, dto.Role);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok($"Role {dto.Role} assigned to {dto.Email}.");
+    }
+
 }

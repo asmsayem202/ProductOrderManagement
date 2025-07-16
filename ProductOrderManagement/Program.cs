@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProductOrderManagement.Auth;
 using ProductOrderManagement.Data;
@@ -69,14 +68,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
 
 var app = builder.Build();
 
-// Roles Seed
+
+// Call the seed logic here
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roles = ["Admin", "User"];
-    foreach (var role in roles)
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
+    await DbSeeder.SeedRolesAndSuperAdminAsync(scope.ServiceProvider);
 }
 
 app.UseSwagger();
