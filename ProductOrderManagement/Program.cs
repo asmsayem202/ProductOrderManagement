@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProductOrderManagement.Auth;
 using ProductOrderManagement.Data;
@@ -11,6 +12,7 @@ using ProductOrderManagement.Services;
 using ProductOrderManagement.Services.Interfaces;
 using ProductOrderManagement.Validators;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +53,10 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
     {
+        // Enables string representation of enums in JSON
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+        //Ignore cycles in JSON serialization loops infinitely
         opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
