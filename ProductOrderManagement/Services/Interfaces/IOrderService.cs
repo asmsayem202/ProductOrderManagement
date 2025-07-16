@@ -5,9 +5,9 @@ namespace ProductOrderManagement.Services.Interfaces;
 
 public interface IOrderService
 {
-    Task<IEnumerable<Order>> GetAllAsync();
-    Task<Order?> GetByIdAsync(int id);
-    Task<Order> CreateAsync(CreateOrderDto dto);
+    Task<IEnumerable<OrderDto>> GetAllAsync();
+    Task<OrderDto?> GetByIdAsync(int id);
+    Task<OrderDto> CreateAsync(CreateOrderDto dto);
     Task<bool> UpdateAsync(int id, CreateOrderDto dto);
     Task<bool> DeleteAsync(int id);
 }

@@ -1,4 +1,6 @@
-﻿namespace ProductOrderManagement.Dtos;
+﻿using ProductOrderManagement.Enums;
+
+namespace ProductOrderManagement.Dtos;
 
 public class OrderDetailsDto
 {
@@ -12,7 +14,10 @@ public class OrderDetailsDto
 
 public class OrderItemDto
 {
+    public int Id { get; set; }
     public string ProductName { get; set; } = default!;
-    public string VariantSpec { get; set; } = default!;
+    public string VariantColor { get; set; } = default!;
+    public string VariantSpecification { get; set; } = default!;
+    public Size VariantSize { get; set; }
     public int Quantity { get; set; }
 }

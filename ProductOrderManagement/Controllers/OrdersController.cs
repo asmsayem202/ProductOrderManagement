@@ -17,18 +17,33 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _orderService.GetAllAsync());
+    public async Task<IActionResult> GetAll()
+    {
+        var orders = await _orderService.GetAllAsync();
+        return Ok(orders);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var order = await _orderService.GetByIdAsync(id);
-        return order == null ? NotFound() : Ok(order);
+        if (order == null)
+            return NotFound();
+
+        return Ok(order);
     }
 
+
     [HttpPost]
-    public async Task<IActionResult> Create(CreateOrderDto dto)
-        => Ok(await _orderService.CreateAsync(dto));
+    public async Task<IActionResult> Create([FromBody] CreateOrderDto createOrderDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var createdOrder = await _orderService.CreateAsync(createOrderDto);
+        return CreatedAtAction(nameof(GetById), new { id = createdOrder.Id }, createdOrder);
+    }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, CreateOrderDto dto)

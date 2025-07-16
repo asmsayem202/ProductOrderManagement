@@ -15,13 +15,56 @@ public class ProductService : IProductService
         _context = context;
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
-        => await _context.Products.Include(p => p.Variants).ToListAsync();
+    public async Task<IEnumerable<ProductDto>> GetAllAsync()
+    {
+        var products = await _context.Products
+            .Include(p => p.Variants)
+            .ToListAsync();
 
-    public async Task<Product?> GetByIdAsync(int id)
-        => await _context.Products.Include(p => p.Variants).FirstOrDefaultAsync(p => p.Id == id);
+        return products.Select(p => new ProductDto
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Brand = p.Brand,
+            Type = p.Type,
+            Variants = p.Variants.Select(v => new VariantDto
+            {
+                Id = v.Id,
+                Color = v.Color,
+                Specification = v.Specification,
+                Size = v.Size
+            }).ToList()
+        });
+    }
 
-    public async Task<Product> CreateAsync(ProductDto dto)
+
+    public async Task<ProductDto?> GetByIdAsync(int id)
+    {
+        var product = await _context.Products
+            .Include(p => p.Variants)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (product == null)
+            return null;
+
+        return new ProductDto
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Brand = product.Brand,
+            Type = product.Type,
+            Variants = product.Variants.Select(v => new VariantDto
+            {
+                Id = v.Id,
+                Color = v.Color,
+                Specification = v.Specification,
+                Size = v.Size
+            }).ToList()
+        };
+    }
+
+
+    public async Task<Product> CreateAsync(CreateProductDto dto)
     {
         var product = new Product
         {
@@ -41,7 +84,7 @@ public class ProductService : IProductService
         return product;
     }
 
-    public async Task<bool> UpdateAsync(int id, ProductDto dto)
+    public async Task<bool> UpdateAsync(int id, CreateProductDto dto)
     {
         var product = await _context.Products.Include(p => p.Variants).FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return false;
