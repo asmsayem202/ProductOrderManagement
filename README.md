@@ -37,3 +37,18 @@ An ASP.NET Core Web API for managing products, variants, and customer orders. In
 
 ---
 
+✅ JWT authentication and role-based authorization
+
+✅ SuperAdmin and role seeding
+
+✅ CRUD operations for Products, Variants, Orders
+
+✅ Clean architecture with Dtos, Services, Validators, Controllers
+
+✅ Fluent validations and null-safety
+
+✅ Entity relationships resolved and optimized (e.g., no cascade cycles)
+
+✅ DTO mappings for better API responses
+
+✅ Clean Program.cs with extracted seeding logic
