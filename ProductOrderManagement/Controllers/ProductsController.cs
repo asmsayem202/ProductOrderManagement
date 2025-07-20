@@ -35,17 +35,17 @@ public class ProductsController : ControllerBase
     }
 
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateProductDto dto)
         => Ok(await _productService.CreateAsync(dto));
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, CreateProductDto dto)
         => await _productService.UpdateAsync(id, dto) ? Ok() : NotFound();
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
         => await _productService.DeleteAsync(id) ? Ok() : NotFound();

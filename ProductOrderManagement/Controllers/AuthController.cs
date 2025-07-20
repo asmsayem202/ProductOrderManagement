@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
         if (!result.Succeeded) return BadRequest(result.Errors);
 
         await _userManager.AddToRoleAsync(user, "User");
-        return Ok("User registered successfully");
+        return Ok(new { message = "User registered successfully" });
     }
 
     [HttpPost("login")]
@@ -73,7 +73,7 @@ public class AuthController : ControllerBase
         if (!result.Succeeded)
             return BadRequest(result.Errors);
 
-        return Ok($"Role {dto.Role} assigned to {dto.Email}.");
+        return Ok(new { message = $"Role {dto.Role} assigned to {dto.Email}." });
     }
 
 }

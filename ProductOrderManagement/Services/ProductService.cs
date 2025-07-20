@@ -19,6 +19,7 @@ public class ProductService : IProductService
     {
         var products = await _context.Products
             .Include(p => p.Variants)
+            .OrderByDescending(p => p.Id)
             .ToListAsync();
 
         return products.Select(p => new ProductDto
@@ -36,6 +37,7 @@ public class ProductService : IProductService
             }).ToList()
         });
     }
+
 
 
     public async Task<ProductDto?> GetByIdAsync(int id)
