@@ -31,6 +31,7 @@ public class OrderService : IOrderService
             CustomerName = o.CustomerName,
             CustomerEmail = o.CustomerEmail,
             CustomerAddress = o.CustomerAddress,
+            OrderDate = o.OrderDate,
             Items = o.Items.Select(i => new OrderItemDto
             {
                 Id = i.Id,
@@ -62,6 +63,7 @@ public class OrderService : IOrderService
             CustomerName = order.CustomerName,
             CustomerEmail = order.CustomerEmail,
             CustomerAddress = order.CustomerAddress,
+            OrderDate = order.OrderDate,
             Items = order.Items.Select(i => new OrderItemDto
             {
                 Id = i.Id,
