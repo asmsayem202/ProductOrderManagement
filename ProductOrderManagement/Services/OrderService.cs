@@ -23,6 +23,7 @@ public class OrderService : IOrderService
                 .ThenInclude(i => i.Product)
             .Include(o => o.Items)
                 .ThenInclude(i => i.Variant)
+                .OrderByDescending(o => o.Id)
             .ToListAsync();
 
         return orders.Select(o => new OrderDto
@@ -52,6 +53,7 @@ public class OrderService : IOrderService
                 .ThenInclude(i => i.Product)
             .Include(o => o.Items)
                 .ThenInclude(i => i.Variant)
+                .OrderByDescending(o => o.Id)
             .FirstOrDefaultAsync(o => o.Id == id);
 
         if (order == null)
