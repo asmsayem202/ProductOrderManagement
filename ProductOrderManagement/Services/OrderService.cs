@@ -69,7 +69,9 @@ public class OrderService : IOrderService
             Items = order.Items.Select(i => new OrderItemDto
             {
                 Id = i.Id,
+                ProductId = i.ProductId,
                 ProductName = i.Product?.Name ?? "N/A",
+                VariantId = i.VariantId,
                 VariantColor = i.Variant?.Color ?? "N/A",
                 VariantSpecification = i.Variant?.Specification ?? "N/A",
                 VariantSize = i.Variant?.Size ?? Size.Small,
